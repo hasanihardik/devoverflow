@@ -1,27 +1,28 @@
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 
-type ProfileLinkProps = {
-  title: string;
-  href?: string;
+interface ProfileParams {
   imgUrl: string;
-};
+  href?: string;
+  title: string;
+}
 
-const ProfileLink = ({ title, imgUrl, href }: ProfileLinkProps) => {
+const ProfileLink = ({ imgUrl, href, title }: ProfileParams) => {
   return (
-    <div className="flex-center gap-1">
-      <Image src={imgUrl} alt="icon" width={20} height={20} />
+    <div className="flex-center gap-1 ">
+      <Image src={imgUrl} alt="icon" height={20} width={20} />
+
       {href ? (
         <Link
           href={href}
           target="_blank"
-          className="paragraph-medium text-accent-blue"
+          className="paragraph-medium text-primary-main"
         >
           {title}
         </Link>
       ) : (
-        <p className="paragraph-medium text-dark400_light700">{title}</p>
+        <p className="paragraph-medium text-invert-secondary">{title}</p>
       )}
     </div>
   );

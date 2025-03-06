@@ -1,8 +1,12 @@
-import React from "react";
-import { SignIn as SignInForm } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs";
+import type { Metadata } from "next";
 
-const SignIn = () => {
-  return <SignInForm />;
+
+export const metadata: Metadata = {
+  title: "DevExchange | Sign In",
+  description: "Sign in to your account",
 };
 
-export default SignIn;
+export default function Page() {
+  return <SignIn />;
+}

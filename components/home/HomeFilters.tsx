@@ -1,47 +1,50 @@
-"use client";
-import { HomePageFilters } from "@/constants/filter";
-import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+'use client';
+
+import { HomePageFilters } from '@/constants/filters';
+import React, { useState } from 'react';
+import { Button } from '../ui/button';
+import { useParams, useRouter } from 'next/navigation';
+import { formUrlQuery } from '@/lib/utils';
 
 const HomeFilters = () => {
-  const searchParmas = useSearchParams();
+  const searchParams = useParams();
   const router = useRouter();
-  const query = searchParmas.get("filter");
-  const [active, setActive] = useState(query || "");
 
-  const handleTypeClick = (item: string): void => {
+  const [active, setActive] = useState('');
+
+  const handleTypeClick = (item: string) => {
     if (active === item) {
-      setActive("");
+      setActive('');
       const newUrl = formUrlQuery({
-        params: searchParmas.toString(),
-        key: "filter",
+        params: searchParams.toString(),
+        key: 'f',
         value: null,
       });
+
       router.push(newUrl, { scroll: false });
     } else {
       setActive(item);
       const newUrl = formUrlQuery({
-        params: searchParmas.toString(),
-        key: "filter",
+        params: searchParams.toString(),
+        key: 'f',
         value: item.toLowerCase(),
       });
+
       router.push(newUrl, { scroll: false });
     }
   };
 
   return (
-    <div className="mt-10  flex-wrap gap-3 font-inter max-md:hidden md:flex">
-      {HomePageFilters.map((filter: any, index: number) => (
+    <div className="mt-10 hidden flex-wrap gap-3 md:flex">
+      {HomePageFilters.map((filter) => (
         <Button
-          key={index}
-          onClick={() => handleTypeClick(filter.value)}
-          className={`body-medium rounded-lg px-6 py-3 capitalize shadow-none  ${
+          key={filter.value}
+          className={`body-medium rounded px-6 py-3 capitalize shadow-none duration-300 ${
             active === filter.value
-              ? "bg-primary-100 text-primary-500 dark:bg-dark-500"
-              : " bg-light-800 text-light-500 hover:bg-light-800 dark:bg-dark-300 dark:text-light-500 dark:hover:bg-dark-300 "
+              ? 'border border-dashed border-primary-300 bg-primary-100   text-primary-500 hover:bg-primary-200 hover:text-primary-600 dark:border-none dark:bg-primary-400 dark:text-white dark:hover:bg-primary-300 dark:hover:text-gray-200'
+              : 'bg-grey-100 text-gray-600 hover:bg-primaryDark-100 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300'
           }`}
+          onClick={() => handleTypeClick(filter.value)}
         >
           {filter.name}
         </Button>

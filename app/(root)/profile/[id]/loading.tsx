@@ -1,41 +1,51 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import React from "react";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Loading = () => {
   return (
-    <>
-      {/* top of propfile */}
-      <div className="flex flex-col sm:flex-row sm:justify-between">
-        <div className="flex justify-end">
-          <Skeleton className=" h-10 w-32 rounded-md" />
-        </div>
-        <div className="order-last flex flex-col sm:order-first md:flex-row md:gap-x-5">
-          <Skeleton className="h-36 w-36 rounded-full" />
-          <div className="mt-10 flex flex-col gap-y-1">
-            <Skeleton className="h-5 w-24 rounded-md" />
-            <Skeleton className="h-5 w-16 rounded-md" />
-            <Skeleton className="mt-4 h-5 w-28 rounded-md" />
+    <section>
+      <div className="flex flex-col items-start gap-4 lg:flex-row">
+        <Skeleton className="h-36 w-36 rounded-full" />
+
+        <div className="mt-3">
+          <Skeleton className="h-7 w-28" />
+          <Skeleton className="mt-3 h-7 w-20" />
+
+          <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
+            <Skeleton className="h-9 w-36" />
+            <Skeleton className="h-9 w-36" />
+            <Skeleton className="h-9 w-36" />
           </div>
+
+          <Skeleton className="mt-8 h-7 w-9/12" />
         </div>
       </div>
 
-      {/* stats */}
-      <div className="mt-10">
-        <h3 className="h3-bold text-dark100_light900">Stats</h3>
-        <div className="mt-3 flex gap-x-5">
-          {[1, 2, 3, 4].map((item: number) => (
-            <Skeleton key={item} className="h-28 flex-1" />
-          ))}
+      <div className="mb-12 mt-10">
+        <Skeleton className="h-7 w-full" />
+
+        <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
+          <Skeleton className="h-28 rounded-md" />
+          <Skeleton className="h-28 rounded-md" />
+          <Skeleton className="h-28 rounded-md" />
+          <Skeleton className="h-28 rounded-md" />
         </div>
       </div>
-      {/* answers and questions */}
-      <Skeleton className="mt-10 h-10 w-32" />
-      <div className="mt-4 flex flex-col gap-y-7">
-        {[1, 2].map((item: number) => (
-          <Skeleton key={item} className="h-36 w-full" />
-        ))}
+
+      <div className="mt-10 flex gap-10">
+        <div className="flex flex-1 flex-col">
+          <div className="flex">
+            <Skeleton className="h-11 w-24 rounded-r-none" />
+            <Skeleton className="h-11 w-24 rounded-l-none" />
+          </div>
+
+          <div className="mt-5 flex w-full flex-col gap-6">
+            {[1, 2, 3, 4, 5].map((item) => (
+              <Skeleton key={item} className="h-48 w-full rounded-xl" />
+            ))}
+          </div>
+        </div>
       </div>
-    </>
+    </section>
   );
 };
 

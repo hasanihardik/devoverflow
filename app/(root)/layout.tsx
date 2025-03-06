@@ -1,24 +1,27 @@
-import React from "react";
-import NavBar from "@/components/shared/navbar/NavBar";
-import LeftSidebar from "@/components/shared/LeftSidebar";
-import RightSidebar from "@/components/shared/RightSidebar";
-import { Toaster } from "@/components/ui/toaster";
+import LeftSidebar from '@/components/shared/leftsidebar/LeftSidebar';
+import Navbar from '@/components/shared/navbar/Navbar';
+import RightSidebar from '@/components/shared/rightsidebar/RightSidebar';
+import React from 'react';
+import NextTopLoader from 'nextjs-toploader';
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="background-light850_dark100 relative">
-      <NavBar />
+    <main className="background-default_bg_primary50 relative">
+      <NextTopLoader
+        color="#007FFF"
+        height={2}
+        showSpinner={false}
+        easing="ease-in"
+      />
+      <Navbar />
       <div className="flex">
         <LeftSidebar />
-        <section className="flex min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
-          <div className="mx-auto w-full max-w-5xl ">{children}</div>
+        <section className="max-mb:pb-14 flex min-h-screen flex-1 flex-col px-6 pb-6 pt-36 sm:px-14 ">
+          <div className="mx-auto w-full max-w-5xl"> {children}</div>
         </section>
         <RightSidebar />
       </div>
-      <Toaster />
+      {/* Notifications */}
     </main>
   );
 };

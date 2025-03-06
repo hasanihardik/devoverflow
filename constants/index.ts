@@ -1,9 +1,30 @@
-import { SidebarLink, Theme } from "@/types";
+import { SidebarLink } from "@/types";
 
-export const themes: Theme[] = [
-  { value: "light", label: "Light", icon: "/assets/icons/sun.svg" },
-  { value: "dark", label: "Dark", icon: "/assets/icons/moon.svg" },
-  { value: "system", label: "System", icon: "/assets/icons/computer.svg" },
+
+
+// we can add more themes here
+export const themes = [
+  {
+    value: "light",
+    label: "Light",
+    activeIcon: "/assets/icons/sun.svg",
+    lightIcon: "/assets/icons/sun-dark-100.svg",
+    darkIcon: "/assets/icons/sun-dark-400.svg",
+  },
+  {
+    value: "dark",
+    label: "Dark",
+    activeIcon: "/assets/icons/moon.svg",
+    lightIcon: "/assets/icons/moon-dark-100.svg",
+    darkIcon: "/assets/icons/moon-dark-400.svg",
+  },
+  {
+    value: "system",
+    label: "System",
+    activeIcon: "/assets/icons/system.svg",
+    lightIcon: "/assets/icons/system-dark-100.svg",
+    darkIcon: "/assets/icons/system-dark-400.svg",
+  },
 ];
 
 export const sidebarLinks: SidebarLink[] = [
@@ -22,11 +43,11 @@ export const sidebarLinks: SidebarLink[] = [
     route: "/collection",
     label: "Collections",
   },
-  {
-    imgURL: "/assets/icons/suitcase.svg",
-    route: "/jobs",
-    label: "Find Jobs",
-  },
+  // {
+  //   imgURL: "/assets/icons/suitcase.svg",
+  //   route: "/jobs",
+  //   label: "Find Jobs",
+  // },
   {
     imgURL: "/assets/icons/tag.svg",
     route: "/tags",
@@ -42,7 +63,13 @@ export const sidebarLinks: SidebarLink[] = [
     route: "/ask-question",
     label: "Ask a question",
   },
+  {
+    imgURL: "/assets/icons/stars-white-2.svg",
+    route: "/ask-ai",
+    label: "Ask AI",
+  },
 ];
+
 
 export const BADGE_CRITERIA = {
   QUESTION_COUNT: {
@@ -71,3 +98,4 @@ export const BADGE_CRITERIA = {
     GOLD: 100000,
   },
 };
+

@@ -1,35 +1,33 @@
-import Question from "@/components/forms/Question";
-import { getQuestionById } from "@/lib/actions/question.action";
-import getUserById from "@/lib/actions/user.action";
-import { ParamsProps } from "@/types";
-import { auth } from "@clerk/nextjs";
-import React from "react";
+import Question from '@/components/forms/Question';
+import { getQuestionById } from '@/lib/actions/question.action';
+import { getUserById } from '@/lib/actions/user.action';
+import { auth } from '@clerk/nextjs';
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+
 
 export const metadata: Metadata = {
-  title: "Edit Question | DevOverflow",
+  title: "DevExchange | Edit Question",
+  description: "Edit a question.",
 };
 
-const QuestionEdit = async ({ params: { id } }: ParamsProps) => {
+const page = async ({ params }: any) => {
   const { userId } = auth();
-  if (!userId) redirect("/");
+  if (!userId) return null;
 
   const mongoUser = await getUserById({ userId });
-  const result = await getQuestionById({ questionId: id });
-
+  const result = await getQuestionById({ questionId: params.id });
   return (
-    <>
-      <h1 className="h1-bold text-dark100_light900">Edit Question</h1>
+    <div>
+      <h1 className="text-invert h1-bold">Edit Question</h1>
       <div className="mt-9">
         <Question
-          mongoUserId={JSON.parse(JSON.stringify(mongoUser._id))}
           type="Edit"
+          mongoUserId={mongoUser._id}
           questionDetails={JSON.stringify(result)}
         />
       </div>
-    </>
+    </div>
   );
 };
 
-export default QuestionEdit;
+export default page;

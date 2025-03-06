@@ -1,18 +1,26 @@
-import React from "react";
-import Metric from "../shared/Metric";
-import { formatAndDividerNumber, getTimestamp } from "@/lib/utils";
-import Link from "next/link";
-import { SignedIn } from "@clerk/nextjs";
-import EditDeleteAction from "../shared/EditDeleteAction";
+import Link from 'next/link';
 
-type AnswerCardProps = {
-  _id: string;
-  question: { _id: string; title: string };
-  author: { _id: number; name: string; picture: string; clerkId: string };
-  createdAt: Date;
-  upvotes: string[];
+import Metric from '../shared/Metric';
+import { formatNumber, getTimeStamps } from '@/lib/utils';
+import { SignedIn } from '@clerk/nextjs';
+import EditDeleteAction from '../shared/EditDeleteAction';
+
+interface Props {
   clerkId?: string | null;
-};
+  _id: string;
+  question: {
+    _id: string;
+    title: string;
+  };
+  author: {
+    _id: string;
+    clerkId: string;
+    name: string;
+    picture: string;
+  };
+  upvotes: number;
+  createdAt: Date;
+}
 
 const AnswerCard = ({
   clerkId,
@@ -21,50 +29,56 @@ const AnswerCard = ({
   author,
   upvotes,
   createdAt,
-}: AnswerCardProps) => {
+}: Props) => {
+
   const showActionButton = clerkId && clerkId === author.clerkId;
 
   return (
-    <div className="card-wrapper rounded-[10px] p-9 sm:px-11 ">
-      <div className="flex flex-col-reverse items-start justify-between gap-1 sm:flex-row">
-        <Link href={`/question/${question._id}`}>
-          <h3 className="sm:h3-semibold base-semibold text-dark400_light700 line-clamp-1 flex-1 font-inter">
+    <Link
+      href={`/question/${question._id}/#${_id}`}
+      className="card-wrapper rounded-[10px] px-11 py-9"
+    >
+      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
+        <div>
+          <span className="subtle-regular text-invert-secondary line-clamp-1 flex sm:hidden">
+            {getTimeStamps(createdAt)}
+          </span>
+          <h3 className="sm:h3-semibold base-semibold text-invert line-clamp-1 flex-1">
             {question.title}
           </h3>
-        </Link>
-        <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
-          {getTimestamp(createdAt)}
-        </span>
+        </div>
+
         <SignedIn>
           {showActionButton && (
-            <EditDeleteAction
-              type="Answer"
-              itemId={JSON.parse(JSON.stringify(_id))}
-            />
+            <div>
+              <EditDeleteAction type="Answer" itemId={JSON.stringify(_id)} />
+            </div>
           )}
         </SignedIn>
       </div>
+
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
           imgUrl={author.picture}
-          alt="user"
+          alt="user avatar"
           value={author.name}
-          title={`- asked ${getTimestamp(createdAt)}`}
-          textStyle="body-medium text-dark400_light800"
-          href={`/profile/${author._id}`}
+          title={` - answered ${getTimeStamps(createdAt)}`}
+          href={`/profile/${author.clerkId}`}
+          textStyles="body-medium text-invert-secondary"
           isAuthor
         />
-        <div className="flex gap-3">
+
+        <div className="flex-center gap-3">
           <Metric
             imgUrl="/assets/icons/like.svg"
-            alt="Upvotes"
-            value={formatAndDividerNumber(upvotes.length)}
-            title="Votes"
-            textStyle="small-medium text-dark400_light800"
+            alt="like icon"
+            value={formatNumber(upvotes)}
+            title=" Votes"
+            textStyles="small-medium text-invert-secondary"
           />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

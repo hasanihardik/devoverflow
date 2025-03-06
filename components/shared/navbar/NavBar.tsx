@@ -1,37 +1,38 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import Theme from "../Theme";
-import MobileNav from "./MobileNav";
-import GlobalSearch from "../search/GlobalSearch";
+import { SignedIn, UserButton } from '@clerk/nextjs';
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import Theme from './Theme';
+import MobileNav from './MobileNav';
+import GlobalSearch from '../search/GlobalSearch';
 
-const NavBar = () => {
+const Navbar = () => {
   return (
-    <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
-      <Link href={"/"} className="flex items-center gap-1">
+    <nav className="flex-between background-background_paper fixed z-50 w-full gap-5 border-b-2 border-divider p-3 shadow-light-300 backdrop-blur-lg dark:border-none dark:shadow-none sm:px-12">
+      <Link href="/" className="flex items-center gap-1">
         <Image
-          src={"/assets/images/site-logo.svg"}
-          width={23}
-          height={23}
-          alt="DevFlow"
+          src="/assets/images/logo.svg"
+          height={25}
+          width={25}
+          alt="DevExchange"
         />
-        <p className="h2-bold font-spaceGrotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          Dev <span className="text-primary-500">OverFlow</span>
+
+        <p className="h2-bold font-spaceGrotesk text-gray-800 dark:text-white max-sm:hidden">
+          DevExchange
         </p>
       </Link>
       <GlobalSearch />
-      <div className="flex-between gap-5">
+      <div className="flex-between gap-1">
         <Theme />
         <SignedIn>
           <UserButton
             afterSignOutUrl="/"
             appearance={{
               elements: {
-                avatarBox: "h-10 w-10",
+                avatarBox: 'h-7 w-7',
               },
               variables: {
-                colorPrimary: "#ff7000",
+                colorPrimary: '#007FFF',
               },
             }}
           />
@@ -42,4 +43,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default Navbar;

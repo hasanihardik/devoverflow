@@ -1,54 +1,68 @@
-"use client";
+'use client';
 
+import React from 'react';
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { formUrlQuery } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+} from '@/components/ui/select';
 
-type FilterProps = {
-  filters: { name: string; value: string }[];
+import { formUrlQuery } from '@/lib/utils';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+interface filterProps {
+  filters: {
+    name: string;
+    value: string;
+  }[];
   otherClasses?: string;
   containerClasses?: string;
-};
+}
 
-const Filter = ({ filters, otherClasses, containerClasses }: FilterProps) => {
-  const router = useRouter();
+const Filter = ({ filters, otherClasses, containerClasses }: filterProps) => {
   const searchParams = useSearchParams();
-  const query = searchParams.get("filter");
+  const router = useRouter();
+
+
+  const paramsFilters = searchParams.get('f');
 
   const handleUpdateParams = (value: string) => {
     const newUrl = formUrlQuery({
       params: searchParams.toString(),
-      key: "filter",
-      value: value.toLowerCase(),
+      key: 'filter',
+      value,
     });
+
     router.push(newUrl, { scroll: false });
   };
-
   return (
-    <div className={`relative font-inter ${containerClasses}`}>
+    <div className={`relative ${containerClasses}`}>
       <Select
-        onValueChange={(value) => handleUpdateParams(value)}
-        defaultValue={query || ""}
+        onValueChange={handleUpdateParams}
+        defaultValue={paramsFilters || undefined}
       >
         <SelectTrigger
-          className={`${otherClasses} body-regular light-border background-light800_dark300 text-dark500_light700 border px-5 py-2.5`}
+          className={`${otherClasses} body-regular filter_background border px-5 py-2.5 text-gray-400`}
         >
-          <div className="line-clamp-1 flex-1 text-left">
-            <SelectValue placeholder="Select a Filter" />
+          <div className=" line-clamp-1 flex-1 text-left">
+            <SelectValue placeholder="Filter"/>
           </div>
         </SelectTrigger>
-        <SelectContent>
-          {filters.map((filter: any, index: number) => (
-            <SelectItem key={index} value={filter.value}>
-              {filter.name}
-            </SelectItem>
-          ))}
+        <SelectContent className="text-invert gap-3 border-none">
+          <SelectGroup className="background-bg_white_dark-primary800">
+            {filters.map((filter) => (
+              <SelectItem
+                key={filter.value}
+                value={filter.value}
+                className="cursor-pointer gap-1 p-2 hover:outline-none"
+              >
+                {filter.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>

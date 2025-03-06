@@ -1,29 +1,28 @@
-import Profile from "@/components/forms/Profile";
-import getUserById from "@/lib/actions/user.action";
-import { ParamsProps } from "@/types";
-import { auth } from "@clerk/nextjs";
-import React from "react";
+import Profile from '@/components/forms/Profile';
+import { getUserById } from '@/lib/actions/user.action';
+import { auth } from '@clerk/nextjs';
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+
 
 export const metadata: Metadata = {
-  title: "Edit Profile | DevOverflow",
+  title: "DevExchange | Edit Profile",
+  description: "Edit your profile.",
 };
 
-const EditProfile = async ({ params: { id } }: ParamsProps) => {
+const Page = async ({ params }: any) => {
   const { userId } = auth();
-  if (!userId) redirect("/");
+  if (!userId) return null;
 
   const mongoUser = await getUserById({ userId });
-
+  // const result = await getQuestionById({ questionId: params.id });
   return (
-    <>
-      <h1 className="h1-bold text-dark100_light900">Edit Profile</h1>
+    <div>
+      <h1 className="text-invert h1-bold">Edit Profile</h1>
       <div className="mt-9">
-        <Profile clerkId={mongoUser._id} user={JSON.stringify(mongoUser)} />
+        <Profile clerkId={userId} user={JSON.stringify(mongoUser)} />
       </div>
-    </>
+    </div>
   );
 };
 
-export default EditProfile;
+export default Page;

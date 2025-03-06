@@ -1,41 +1,55 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "../ui/button";
+import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { Button } from '../ui/button';
 
-type NotResultProps = {
+interface Props {
   title: string;
-  description: string;
-  link: string;
-  linkTitle: string;
-};
+  description?: string;
+  hasButton?: boolean;
+  btnText?: string;
+  btnLink?: string | null;
+}
 
-const NoResult = ({ title, description, link, linkTitle }: NotResultProps) => {
+const NoResult = ({
+  title,
+  description,
+  hasButton,
+  btnText,
+  btnLink,
+}: Props) => {
   return (
-    <div className="mt-10 flex w-full flex-col items-center justify-center">
+    <div className=" flex-center my-10 w-full flex-col">
       <Image
-        src={"/assets/images/light-illustration.png"}
-        alt="No result illustration"
+        src="/assets/images/no-questions.svg"
+        alt="no Question"
         width={270}
         height={200}
-        className="block object-contain dark:hidden"
+        className="hidden dark:flex"
       />
       <Image
-        src={"/assets/images/dark-illustration.png"}
-        alt="No result illustration"
+        src="/assets/images/light-no-questions.svg"
+        alt="no Question"
         width={270}
         height={200}
-        className="hidden object-contain dark:flex"
+        className="dark:hidden"
       />
-      <h2 className="h2-bold text-dark200_light900 mt-7">{title}</h2>
-      <p className="body-regular text-dark500_light700 my-3.5 max-w-md text-center">
+      <h2
+        className="h2-bold
+      text-invert mt-8"
+      >
+        {title}
+      </h2>
+      <p className="body-regular text-invert-secondary mt-3.5 max-w-md text-center">
         {description}
       </p>
-      <Link href={link}>
-        <Button className="paragraph-medium mt-5 min-h-[46px] rounded-lg bg-primary-500 px-4 py-3 text-light-900 hover:bg-primary-500 dark:bg-primary-500 dark:text-light-900">
-          {linkTitle}
-        </Button>
-      </Link>
+      {hasButton && (
+        <Link href={btnLink || '/'}>
+          <Button className="paragraph-medium primary-gradient mt-5 min-h-[46px] rounded-lg text-white hover:bg-primary-700">
+            {btnText}
+          </Button>
+        </Link>
+      )}
     </div>
   );
 };

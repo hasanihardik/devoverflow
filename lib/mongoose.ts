@@ -1,8 +1,21 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+let isConnected: boolean = false;
 
 export const connectToDatabase = async () => {
-  if (mongoose.connections[0].readyState) {
-    return;
-  }
-  await mongoose.connect(process.env.MONGODB_URL!, { dbName: "devflow" });
-};
+    mongoose.set('strictQuery', true)
+    if(!process.env.MONGODB_URI) return console.log('MONGODB_URI is not defined');
+
+    if (isConnected) {
+        return;
+        
+    }
+
+    try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+            dbName: 'DevExchange'
+        })
+        isConnected = true;
+    } catch ( error ) {
+        console.log('error connecting to database', error);
+    }
+}

@@ -1,82 +1,87 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/ui/input";
-import { formUrlQuery, removeKeyFromQuery } from "@/lib/utils";
-import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { Input } from '../../ui/input';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
 
-type CustomInputProps = {
+interface CustomInputProps {
   route: string;
-  iconPosition: "left" | "right";
-  placeHolder: string;
   imgSrc: string;
-  otherClasses?: string;
-};
+  iconPosition: string;
+  placeholder: string;
+  otherClasses: string;
+}
 
-const  LocalSearchBar = ({
+const LocalSearchBar = ({
   route,
-  placeHolder,
-  iconPosition,
   imgSrc,
+  iconPosition,
+  placeholder,
   otherClasses,
 }: CustomInputProps) => {
-
-  
   const router = useRouter();
-  const pathName = usePathname();
-  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const searchParam = useSearchParams();
 
-  const query = searchParams.get("q");
+  const query = searchParam.get('q');
 
-  const [search, setSearch] = useState(query || "");
-
+  const [search, setSearch] = useState(query || '');
 
   useEffect(() => {
-    const debounceFn = setTimeout(() => {
+    const delayDebounceFn = setTimeout(() => {
       if (search) {
         const newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: "q",
+          params: searchParam.toString(),
+          key: 'q',
           value: search,
         });
+
         router.push(newUrl, { scroll: false });
-      } else if (pathName === route) {
-        const newUrl = removeKeyFromQuery({
-          params: searchParams.toString(),
-          keys: ["q"],
-        });
-        router.push(newUrl, { scroll: false });
+      } else {
+        if (pathname === route) {
+          const newUrl = removeKeysFromQuery({
+            params: searchParam.toString(),
+            keys: ['q'],
+          });
+
+          router.push(newUrl, { scroll: false });
+
+        }
       }
     }, 300);
-    return () => clearTimeout(debounceFn);
-    
-  }, [search, router, searchParams, pathName, route]);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, pathname, route, searchParam, router, query]);
 
   return (
-    <div className="background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4">
-      {iconPosition === "left" && (
+    <div
+      className={`search_background flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
+    >
+      {iconPosition === 'left' && (
         <Image
           src={imgSrc}
-          alt="Search Icon"
-          width={24}
-          height={24}
+          width={20}
+          height={20}
+          alt="Search"
           className="cursor-pointer"
         />
       )}
       <Input
         type="text"
-        placeholder={placeHolder}
+        placeholder={placeholder}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className={`paragraph-regular background-light800_darkgradient !border-none text-dark-400 shadow-none !outline-none focus:border-none focus:outline-none dark:text-light-700 ${otherClasses}`}
+        className="paragraph-regular no-focus search_background border-none text-gray-600 shadow-none outline-none dark:text-gray-400"
       />
-      {iconPosition === "right" && (
+
+      {iconPosition === 'right' && (
         <Image
           src={imgSrc}
-          alt="Search Icon"
-          width={24}
-          height={24}
+          width={20}
+          height={20}
+          alt="Search"
           className="cursor-pointer"
         />
       )}

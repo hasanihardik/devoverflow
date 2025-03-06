@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
+import type { Metadata } from "next";
 
-type LayoutProps = {
-  children: React.ReactNode;
+
+export const metadata: Metadata = {
+  title: "DevExchange | Sign up",
+  description: "Sign up to your account",
 };
-const Layout = ({ children }: LayoutProps) => {
+
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center">
+    <div className="flex-center min-h-screen bg-auth-light bg-cover dark:bg-auth-dark">
       {children}
     </div>
   );
 };
+
 export default Layout;

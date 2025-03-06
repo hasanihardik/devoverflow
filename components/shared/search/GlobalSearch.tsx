@@ -1,84 +1,95 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import { formUrlQuery, removeKeyFromQuery } from "@/lib/utils";
-import Image from "next/image";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import GlobalResult from "../GlobalResult";
+'use client';
+
+import Image from 'next/image';
+import React, { useEffect, useRef, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { formUrlQuery, removeKeysFromQuery } from '@/lib/utils';
+import GlobalResult from './GlobalResult';
 
 const GlobalSearch = () => {
-  
-  const searchParams = useSearchParams();
-  const globalQuery = searchParams.get("global");
-  const pathName = usePathname();
   const router = useRouter();
-  const searchContainerRef = useRef<null | HTMLDivElement>(null);
+  const pathname = usePathname();
+  const searchParam = useSearchParams();
 
-  const [value, setValue] = useState<string>(globalQuery || "");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const query = searchParam.get('q');
+
+  const [search, setSearch] = useState(query || '');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const searchContainerRef = useRef(null);
 
   useEffect(() => {
-    const handleOutsideClick = (event: any) => {
+    const handelOutsideClick = (event: any) => {
       if (
         searchContainerRef.current &&
+        // @ts-ignore
         !searchContainerRef.current.contains(event.target)
       ) {
         setIsOpen(false);
+        setSearch('');
       }
     };
     setIsOpen(false);
-    document.addEventListener("click", handleOutsideClick);
+    document.addEventListener('click', handelOutsideClick);
+
     return () => {
-      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener('click', handelOutsideClick);
     };
-  }, [pathName]);
+  }, [pathname]);
 
   useEffect(() => {
-    const debounceFn = setTimeout(() => {
-      if (value) {
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
         const newUrl = formUrlQuery({
-          params: searchParams.toString(),
-          key: "global",
-          value,
+          params: searchParam.toString(),
+          key: 'global',
+          value: search,
         });
+
         router.push(newUrl, { scroll: false });
-      }
-      if (value.length === 0) {
-        const newUrl = removeKeyFromQuery({
-          params: searchParams.toString(),
-          keys: ["global", "type"],
-        });
-        router.push(newUrl, { scroll: false });
+      } else {
+        if (!query) {
+          const newUrl = removeKeysFromQuery({
+            params: searchParam.toString(),
+            keys: ['global', 'type'],
+          });
+
+          router.push(newUrl, { scroll: false });
+        }
       }
     }, 300);
-    return () => clearTimeout(debounceFn);
-  }, [value, router, searchParams, globalQuery]);
 
-  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    if (!isOpen) setIsOpen(true);
-    if (e.target.value === "") setIsOpen(false);
-  };
+    return () => clearTimeout(delayDebounceFn);
+  }, [search, pathname, router, searchParam, query]);
 
   return (
     <div
       className="relative w-full max-w-[600px] max-lg:hidden"
       ref={searchContainerRef}
     >
-      <div className="background-light800_darkgradient relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4">
+      <div className="search_background relative flex min-h-[48px] items-center gap-1 rounded-xl border-red-500 px-4 ">
         <Image
-          src={"/assets/icons/search.svg"}
-          width={24}
-          height={24}
-          alt="search"
+          src="/assets/icons/search.svg"
+          width={20}
+          height={20}
+          alt="Search"
           className="cursor-pointer"
         />
         <Input
           type="text"
-          placeholder="Search..."
-          value={value}
-          onChange={(e) => inputHandler(e)}
-          className="paragraph-regular text-dark400_light700  border-none shadow-none outline-none placeholder:text-light-400 focus-visible:ring-0 focus-visible:ring-transparent dark:bg-dark-300 dark:placeholder:text-light-400"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            if (!isOpen) {
+              setIsOpen(true);
+            }
+            if (e.target.value === '' && isOpen) {
+              setIsOpen(false);
+            }
+          }}
+          placeholder="Search"
+          className="paragraph-regular no-focus search_background border-none text-gray-600 shadow-none dark:text-gray-400"
         />
       </div>
       {isOpen && <GlobalResult />}

@@ -1,37 +1,41 @@
-import QuestionCard from "@/components/cards/QuestionCard";
-import Filter from "@/components/shared/Filter";
-import NoResult from "@/components/shared/NoResult";
-import Pagination from "@/components/shared/Pagination";
-import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
-import { HomePageFilters } from "@/constants/filter";
-import { getQuestionByTagId } from "@/lib/actions/tag.action";
-import { URLProps } from "@/types";
-import React from "react";
+import QuestionCard from '@/components/cards/QuestionCard';
+import Pagination from '@/components/shared/Pagination';
+import LocalSearchBar from '@/components/shared/search/LocalSearchBar';
+
+import { getQuestionByTagId } from '@/lib/actions/tag.actions';
+import Image from 'next/image';
 import type { Metadata } from "next";
 
-const TagDetail = async ({ params: { id }, searchParams }: URLProps) => {
+
+export const metadata: Metadata = {
+  title: "DevExchange | Tags",
+  description: "Questions associated with a tag.",
+};
+
+
+
+const Page = async ({ params, searchParams }: any) => {
+
   const result = await getQuestionByTagId({
-    tagId: id,
-    page: searchParams.page ? +searchParams.page : 1,
+    tagId: params.id,
     searchQuery: searchParams.q,
+    page: searchParams?.page ? +searchParams.page : 1,
   });
 
   return (
-    <>
-      <div className="flex w-full flex-col-reverse justify-between gap-4 font-inter sm:flex-row ">
-        <h1 className="h1-bold text-dark100_light900">{result.tagTitle}</h1>
-      </div>
-      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center ">
+    <main>
+      <h1 className="sm:h1-bold h2-bold text-invert w-full ">
+        Questions associated with:{' '}
+        <span className="capitalize">{result.tagTitle}</span>
+      </h1>
+
+      <div className="mt-11 w-full">
         <LocalSearchBar
-          route="/tags/id"
-          iconPosition="left"
+          route={`/tags/${params.id}`}
           imgSrc="/assets/icons/search.svg"
-          placeHolder="Search for tag questions"
+          iconPosition="left"
+          placeholder="Search for questions"
           otherClasses="flex-1"
-        />
-        <Filter
-          filters={HomePageFilters}
-          otherClasses={"min-h-[56px] sm:min-w-[170px]"}
         />
       </div>
 
@@ -44,48 +48,51 @@ const TagDetail = async ({ params: { id }, searchParams }: URLProps) => {
               title={question.title}
               tags={question.tags}
               author={question.author}
+              upvotes={question.upvotes}
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}
-              upVote={question.upvotes}
             />
           ))
         ) : (
-          <NoResult
-            title="There is no tag question to show"
-            description="Be the first to break the silence! 🚀 Ask a Question and kickstart the
-        discussion. our query could be the next big thing others learn from. Get
-        involved! 💡"
-            link="/ask-question"
-            linkTitle="Ask a Question"
-          />
+          <div className=" flex-center my-10 w-full flex-col">
+            <Image
+              src="/assets/images/no-questions.svg"
+              alt="no Question"
+              width={270}
+              height={200}
+              className="hidden dark:flex"
+            />
+            <Image
+              src="/assets/images/light-no-questions.svg"
+              alt="no Question"
+              width={270}
+              height={200}
+              className="dark:hidden"
+            />
+            <h2
+              className="h2-bold
+          text-invert mt-8"
+            >
+              There&apos;s no Tags to show
+            </h2>
+            <p className="body-regular text-invert-secondary mt-3.5 max-w-md text-center">
+              Be the first to break the silence! 🚀 Ask a Question and kickstart
+              the discussion. our query could be the next big thing others learn
+              from. Get involved! 💡
+            </p>
+          </div>
         )}
       </div>
-      <div className="mt-10">
+
+      <div className="mt-10 w-full items-center">
         <Pagination
-          pageNumber={searchParams.page ? +searchParams.page : 1}
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
           isNext={result.isNext}
         />
       </div>
-    </>
+    </main>
   );
 };
 
-export default TagDetail;
-
-type metaInput = {
-  params: { id: string };
-};
-
-export const generateMetadata = async ({
-  params: { id },
-}: metaInput): Promise<Metadata> => {
-  const data = await getQuestionByTagId({
-    tagId: id,
-  });
-
-  return {
-    title: data.tagTitle,
-    description: `${data.tagTitle} questions page`,
-  };
-};
+export default Page;
